@@ -12,14 +12,43 @@ class PagesController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
+
         return $this->render("pages/home.html.twig");
     }
 
     #[Route('/generate-password', name: 'app_generate_password')]
      public function generatePassword(Request $request)
      {
-         dump($request->query->all());
+         $length            =$request->query->getInt('length');
+         $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
+         $digits            =$request->query->getBoolean('digits');
+         $specialCharacters =$request->query->getBoolean('special_characters');
 
-        return $this->render("pages/generatePassword.html.twig");
+         //       Recuperation des lettres de [a-z] en minuscules
+         $characters = range('a','z');
+
+         if($uppercaseLatters){
+             //fusion des deux tables [a-z] et [A-Z] avec array_merge()
+             $characters = array_merge($characters, range('A', 'Z'));
+         }
+         if($digits){
+             $characters = array_merge($characters, range(0, 9));
+         }
+         if ($specialCharacters){
+             $characters = array_merge($characters,['!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']);
+         }
+
+         shuffle($characters);
+         $password = '';
+
+         for ($i = 0; $i<$length; $i++){
+             $password .=$characters[mt_rand(0, count($characters)-1)];
+         }
+
+
+
+        return $this->render("pages/generatePassword.html.twig",[
+            "password" =>$password,
+        ]);
      }
 }
