@@ -36,7 +36,7 @@ class PagesController extends AbstractController
          $characters= $lowerCaseLattersSet;
          $password = '';
 
-         $password .= $lowerCaseLattersSet[random_int(0, count($lowerCaseLattersSet)-1)];
+         $password .= $this->pickRandomItemFromTab($lowerCaseLattersSet);
 
          // Ajout de lettre en minuscule
          if($uppercaseLatters){
@@ -44,20 +44,20 @@ class PagesController extends AbstractController
              $characters = array_merge($characters, $upperCaseLattersSet);
 
              ////On rajoute une lettre en majuscule de maniere aleatoire
-             $password .=$upperCaseLattersSet[random_int(0, count($upperCaseLattersSet)-1)] ;
+             $password .=$this->pickRandomItemFromTab($upperCaseLattersSet) ;
          }
          if($digits){
              $characters = array_merge($characters, $digitsSet);
 
              //On rajoute un nombre de maniere aleatoire
-             $password .=$digitsSet[random_int(0, count($digitsSet)-1)] ;
+             $password .=$this->pickRandomItemFromTab($digitsSet) ;
          }
          if ($specialCharacters){
 //           $characters = array_merge($characters,['!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']);
              $characters = array_merge($characters, $specialCharactersSet);
 
              //On rajoute un caractere special de maniere aleatoire
-             $password .=$specialCharactersSet[random_int(0, count($specialCharactersSet)-1)] ;
+             $password .=$this->pickRandomItemFromTab($specialCharactersSet ) ;
 
          }
 
@@ -67,7 +67,7 @@ class PagesController extends AbstractController
          for ($i = 0; $i<$numberOfChractersRumuning; $i++){
 //         $password .=$characters[mt_rand(0, count($characters)-1)];
 //         $password .=$characters[array_rand(array: $characters)];
-           $password .=$characters[random_int(0, count($characters)-1)];// Plus securisé
+           $password .=$this->pickRandomItemFromTab($characters);// Plus securisé
          }
 
          //Convertie la chaine de caractere en tableau
@@ -93,5 +93,10 @@ class PagesController extends AbstractController
              $arr[$j]   = $tmp;
          }
         return $arr ;
+     }
+
+     private function pickRandomItemFromTab(array $tab):string
+     {
+            return $tab[random_int(0, count($tab)-1)];
      }
 }
