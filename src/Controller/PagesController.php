@@ -15,6 +15,9 @@ class PagesController extends AbstractController
         return $this->render("pages/home.html.twig");
     }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/generate-password', name: 'app_generate_password')]
      public function generatePassword(Request $request)
      {
@@ -42,9 +45,9 @@ class PagesController extends AbstractController
          $password = '';
 
          for ($i = 0; $i<$length; $i++){
-
-//           $password .=$characters[mt_rand(0, count($characters)-1)];
-             $password .=$characters[array_rand(array: $characters)];
+//         $password .=$characters[mt_rand(0, count($characters)-1)];
+//         $password .=$characters[array_rand(array: $characters)];
+           $password .=$characters[random_int(0, count($characters)-1)];// Plus securise
          }
 
         return $this->render("pages/generatePassword.html.twig",compact('password'));
