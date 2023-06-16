@@ -19,7 +19,7 @@ class PagesController extends AbstractController
      * @throws \Exception
      */
     #[Route('/generate-password', name: 'app_generate_password')]
-     public function generatePassword(Request $request)
+     public function generatePassword(Request $request): Response
      {
          $length            =$request->query->getInt('length');
          $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
@@ -73,7 +73,7 @@ class PagesController extends AbstractController
          //Convertie la chaine de caractere en tableau
          $password = str_split($password);
 
-         $this->secureShuffle($password);
+         $password= $this->secureShuffle($password);
 
          //Convertie le tableau en chaine caractere
          $password = implode('', $password);
@@ -81,9 +81,9 @@ class PagesController extends AbstractController
         return $this->render("pages/generatePassword.html.twig",compact('password'));
      }
 
-     private function secureShuffle(array &$arr):void
+     private function secureShuffle(array $arr):array
      {
-         $arr = array_values($arr);
+//         $arr = array_values($arr); on recupere un tableau numerote
          $length = count($arr);
 
          for ($i = $length - 1; $i>0; $i--) {
@@ -92,6 +92,6 @@ class PagesController extends AbstractController
              $arr[$i]   = $arr[$j];
              $arr[$j]   = $tmp;
          }
-
+        return $arr ;
      }
 }
