@@ -12,7 +12,6 @@ class PagesController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-
         return $this->render("pages/home.html.twig");
     }
 
@@ -35,7 +34,8 @@ class PagesController extends AbstractController
              $characters = array_merge($characters, range(0, 9));
          }
          if ($specialCharacters){
-             $characters = array_merge($characters,['!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']);
+//           $characters = array_merge($characters,['!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']);
+             $characters = array_merge($characters, range('!', '@'));
          }
 
          shuffle($characters);
