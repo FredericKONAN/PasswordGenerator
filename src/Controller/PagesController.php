@@ -34,9 +34,8 @@ class PagesController extends AbstractController
          $specialCharactersSet = range('!', '@');
 
          $characters= $lowerCaseLattersSet;
-         $password = '';
 
-         $password .= $this->pickRandomItemFromTab($lowerCaseLattersSet);
+         $password = [$this->pickRandomItemFromTab($lowerCaseLattersSet)];
 
          // Ajout de lettre en minuscule
          if($uppercaseLatters){
@@ -44,34 +43,34 @@ class PagesController extends AbstractController
              $characters = array_merge($characters, $upperCaseLattersSet);
 
              ////On rajoute une lettre en majuscule de maniere aleatoire
-             $password .=$this->pickRandomItemFromTab($upperCaseLattersSet) ;
+             $password []=$this->pickRandomItemFromTab($upperCaseLattersSet) ;
          }
          if($digits){
              $characters = array_merge($characters, $digitsSet);
 
              //On rajoute un nombre de maniere aleatoire
-             $password .=$this->pickRandomItemFromTab($digitsSet) ;
+             $password []=$this->pickRandomItemFromTab($digitsSet) ;
          }
          if ($specialCharacters){
 //           $characters = array_merge($characters,['!', '#', '$', '%', '&', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', '`', '{', '|', '}', '~']);
              $characters = array_merge($characters, $specialCharactersSet);
 
              //On rajoute un caractere special de maniere aleatoire
-             $password .=$this->pickRandomItemFromTab($specialCharactersSet ) ;
+             $password []=$this->pickRandomItemFromTab($specialCharactersSet ) ;
 
          }
 
-         $numberOfChractersRumuning = $length -mb_strlen($password);
+         $numberOfChractersRumuning = $length -count($password);
             //dd($password);
 
          for ($i = 0; $i<$numberOfChractersRumuning; $i++){
 //         $password .=$characters[mt_rand(0, count($characters)-1)];
 //         $password .=$characters[array_rand(array: $characters)];
-           $password .=$this->pickRandomItemFromTab($characters);// Plus securisé
+           $password []=$this->pickRandomItemFromTab($characters);// Plus securisé
          }
 
          //Convertie la chaine de caractere en tableau
-         $password = str_split($password);
+//         $password = str_split($password);
 
          $password= $this->secureShuffle($password);
 
