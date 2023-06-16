@@ -42,13 +42,11 @@ class PagesController extends AbstractController
          $password = '';
 
          for ($i = 0; $i<$length; $i++){
-             $password .=$characters[mt_rand(0, count($characters)-1)];
+
+//           $password .=$characters[mt_rand(0, count($characters)-1)];
+             $password .=$characters[array_rand(array: $characters)];
          }
 
-
-
-        return $this->render("pages/generatePassword.html.twig",[
-            "password" =>$password,
-        ]);
+        return $this->render("pages/generatePassword.html.twig",compact('password'));
      }
 }
