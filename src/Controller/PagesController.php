@@ -20,16 +20,15 @@ class PagesController extends AbstractController
      * @throws \Exception
      */
     #[Route('/generate-password', name: 'app_generate_password')]
-     public function generatePassword(Request $request): Response
+     public function generatePassword(Request $request, PasswordGenerator $passwordGenerator): Response
      {
 //         $length            =$request->query->getInt('length');
 //         $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
 //         $digits            =$request->query->getBoolean('digits');
 //         $specialCharacters =$request->query->getBoolean('special_characters');
 
-         $passwordGenerate = new PasswordGenerator();
-         
-         $password = $passwordGenerate->generate(
+        
+         $password = $passwordGenerator->generate(
              $request->query->getInt('length'),
              $request->query->getBoolean('uppercase_latters'),
              $request->query->getBoolean('digits'),
