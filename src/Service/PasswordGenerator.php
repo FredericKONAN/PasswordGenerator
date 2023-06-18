@@ -47,16 +47,15 @@ class PasswordGenerator
 //        }
 
         // Refactoring
-
         $mapping = [
-            'uppercaseLatters' => $upperCaseLattersSet,
-            'digits' => $digitsSet,
-            'specialCharacters' => $specialCharactersSet,
+            [$uppercaseLatters, $upperCaseLattersSet],
+            [$digits, $digitsSet],
+            [$specialCharacters , $specialCharactersSet],
         ];
 
-        foreach ($mapping as $constraintEnable => $charctersSet){
+        foreach ($mapping as [$constraintEnable , $charctersSet]){
 
-            if ($$constraintEnable){
+            if ($constraintEnable){
                 $characters = array_merge($characters, $charctersSet);
                 $password []= $this->pickRandomItemFromTab($charctersSet );
             }
@@ -79,7 +78,7 @@ class PasswordGenerator
         return implode('', $password) ;
 
     }
-    
+
     private function secureShuffle(array $arr):array
     {
         $length = count($arr);
