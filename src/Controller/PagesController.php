@@ -27,7 +27,7 @@ class PagesController extends AbstractController
 //         $digits            =$request->query->getBoolean('digits');
 //         $specialCharacters =$request->query->getBoolean('special_characters');
 
-        
+
          $password = $passwordGenerator->generate(
              $request->query->getInt('length'),
              $request->query->getBoolean('uppercase_latters'),
