@@ -10,6 +10,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PagesController extends AbstractController
 {
+    CONST PASSWORD_DEFAULT_LENGTH = 12;
+    CONST PASSWORD_MIN_LENGTH = 8;
+    const PASSWORD_MAX_LENGTH = 60;
+
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
@@ -29,7 +33,7 @@ class PagesController extends AbstractController
 
 
          $password = $passwordGenerator->generate(
-             max(min($request->query->getInt('length'), 60),8),
+             max(min($request->query->getInt('length'), PagesController::PASSWORD_MAX_LENGTH),PagesController::PASSWORD_MIN_LENGTH),
              $request->query->getBoolean('uppercase_latters'),
              $request->query->getBoolean('digits'),
              $request->query->getBoolean('special_characters'),
