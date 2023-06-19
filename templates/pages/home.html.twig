@@ -7,9 +7,9 @@
         <div>
             <label for="Length">Length</label>
             <select name="length" id="Length">
-                {% for i in 8..60 %}
+                {% for i in password_min_length.. password_max_length %}
                     <option value="{{ i }}"
-                           {{ i == 12 ? 'selected' }}
+                           {{ i == password_default_length ?'selected' }}
                     >
                         {{ i }}
                     </option>

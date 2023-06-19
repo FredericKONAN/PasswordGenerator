@@ -4,20 +4,27 @@ namespace App\Controller;
 
 use App\Service\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PagesController extends AbstractController
 {
-    CONST PASSWORD_DEFAULT_LENGTH = 12;
-    CONST PASSWORD_MIN_LENGTH = 8;
-    const PASSWORD_MAX_LENGTH = 60;
+//    CONST PASSWORD_DEFAULT_LENGTH = 12;
+//    CONST PASSWORD_MIN_LENGTH = 8;
+//    const PASSWORD_MAX_LENGTH = 60;
 
     #[Route('/', name: 'app_home')]
     public function home(): Response
     {
-        return $this->render("pages/home.html.twig");
+        return $this->render("pages/home.html.twig", [
+            'password_default_length' => $this->getParameter('app.password_default_length'),
+            'password_min_length' => $this->getParameter('app.password_min_length'),
+            'password_max_length' => $this->getParameter('app.password_max_length'),
+        ]);
     }
 
     /**
@@ -33,7 +40,7 @@ class PagesController extends AbstractController
 
 
          $password = $passwordGenerator->generate(
-             max(min($request->query->getInt('length'), PagesController::PASSWORD_MAX_LENGTH),PagesController::PASSWORD_MIN_LENGTH),
+             max(min($request->query->getInt('length'), $this->getParameter('app.password_max_length')),$this->getParameter('app.password_min_length')),
              $request->query->getBoolean('uppercase_latters'),
              $request->query->getBoolean('digits'),
              $request->query->getBoolean('special_characters'),
