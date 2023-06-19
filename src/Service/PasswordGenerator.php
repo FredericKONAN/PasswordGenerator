@@ -20,7 +20,7 @@ class PasswordGenerator
         );
 
 
-        $characters= $lowerCaseLattersSet;// //On affecte les caracters de l'Alphabet [a-z] en minuscule
+        $characters= [$lowerCaseLattersSet];// //On affecte les caracters de l'Alphabet [a-z] en minuscule
         $password = [$this->pickRandomItemFromTab($lowerCaseLattersSet)];//Rajoute aleatoire au moins d'une lettre en minuscule
 
 //        // Ajout de lettre en minuscule
@@ -56,10 +56,13 @@ class PasswordGenerator
         foreach ($mapping as [$constraintEnable , $charctersSet]){
 
             if ($constraintEnable){
-                $characters = array_merge($characters, $charctersSet);
+                $characters[] =  $charctersSet;
                 $password []= $this->pickRandomItemFromTab($charctersSet );
             }
         }
+        
+        //Deconseil d'utiliser array_merge() au sien d'un foreach
+        $characters = array_merge(...$characters);
 
         $numberOfChractersRumuning = $length -count($password);
 
