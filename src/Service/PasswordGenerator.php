@@ -60,7 +60,7 @@ class PasswordGenerator
                 $password []= $this->pickRandomItemFromTab($charctersSet );
             }
         }
-        
+
         //Deconseil d'utiliser array_merge() au sien d'un foreach
         $characters = array_merge(...$characters);
 
