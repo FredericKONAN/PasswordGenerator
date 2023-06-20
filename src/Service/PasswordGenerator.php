@@ -8,7 +8,7 @@ class PasswordGenerator
 
     public function generate(int $length, bool $uppercaseLatters = false, bool $digits = false, bool $specialCharacters = false,): string
     {
-        //Recuperation des caracteres
+        //On defini nos differents ensemble de caracteres
         $lowerCaseLattersSet = range('a','z');
         $upperCaseLattersSet = range('A', 'Z');
         $digitsSet = range(0, 9);
@@ -19,10 +19,10 @@ class PasswordGenerator
             range('{', '~'),
         );
 
-
-        $characters= [$lowerCaseLattersSet];// //On affecte les caracters de l'Alphabet [a-z] en minuscule
-        $password = [$this->pickRandomItemFromTab($lowerCaseLattersSet)];//Rajoute aleatoire au moins d'une lettre en minuscule
-
+        // Par defaut on rajoute l'ensemble des caracters [a-z] en minuscule
+        $characters= [$lowerCaseLattersSet];
+        //Rajoute aleatoirement au moins une lettre en minuscule de notre [a-z]
+        $password = [$this->pickRandomItemFromTab($lowerCaseLattersSet)];
 //        // Ajout de lettre en minuscule
 //        if($uppercaseLatters){
 //            //fusion des deux tables [a-z] et [A-Z] avec array_merge()
@@ -46,13 +46,19 @@ class PasswordGenerator
 //
 //        }
 
-        // Refactoring
+        // Mapper les contraintes à la lettre associée
         $mapping = [
             [$uppercaseLatters, $upperCaseLattersSet],
             [$digits, $digitsSet],
             [$specialCharacters , $specialCharactersSet],
         ];
 
+
+        //Nous nous assurons que le mot de passe final contient au
+        // moins une {lettre majuscule et/ou chiffre et/ou caractère spécial}
+        //en fonction des contraintes demandées par l'utilisateur.
+        //on fait aussi grossir en même temps le jeu de caractères
+        // final avec le jeu de caractères de la contrainte demandée.
         foreach ($mapping as [$constraintEnable , $charctersSet]){
 
             if ($constraintEnable){
@@ -61,7 +67,7 @@ class PasswordGenerator
             }
         }
 
-        //Deconseil d'utiliser array_merge() au sien d'un foreach
+        //Deconseil d'utiliser array_merge() au sien d'un foreach, consomme assez de memoire.
         $characters = array_merge(...$characters);
 
         $numberOfChractersRumuning = $length -count($password);
@@ -75,7 +81,8 @@ class PasswordGenerator
         //Convertie la chaine de caractere en tableau avec str_split
 //         $password = str_split($password);
 
-        $password= $this->secureShuffle($password); // Melange elements de notre tableau
+        //Nous mélangeons le tableau pour rendre l'ordre des caractères de mot de passe imprévisible.
+        $password= $this->secureShuffle($password);
 
         //Convertie le tableau en chaine caractere
         return implode('', $password) ;

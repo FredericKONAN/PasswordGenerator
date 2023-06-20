@@ -37,10 +37,16 @@ class PagesController extends AbstractController
 //         $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
 //         $digits            =$request->query->getBoolean('digits');
 //         $specialCharacters =$request->query->getBoolean('special_characters');
-
+        //Nous nous assurons que la longueur du mot de passe est toujours
+        // au minimum {app.password_min_length}
+        // et au maximum {app.password_max_length}.
+        $length = max(min(
+            $request->query->getInt('length'),
+            $this->getParameter('app.password_max_length')),
+            $this->getParameter('app.password_min_length'));
 
          $password = $passwordGenerator->generate(
-             max(min($request->query->getInt('length'), $this->getParameter('app.password_max_length')),$this->getParameter('app.password_min_length')),
+             $length,
              $request->query->getBoolean('uppercase_latters'),
              $request->query->getBoolean('digits'),
              $request->query->getBoolean('special_characters'),
