@@ -16,7 +16,11 @@
         "symfony/yaml": "6.3.*"
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.49"
+        "symfony/debug-bundle": "6.3.*",
+        "symfony/maker-bundle": "^1.49",
+        "symfony/monolog-bundle": "^3.0",
+        "symfony/stopwatch": "6.3.*",
+        "symfony/web-profiler-bundle": "6.3.*"
     },
     "config": {
         "allow-plugins": {

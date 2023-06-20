@@ -18,10 +18,13 @@ class PagesController extends AbstractController
 //    const PASSWORD_MAX_LENGTH = 60;
 
     #[Route('/', name: 'app_home')]
-    public function home(): Response
+    public function home(Request $request): Response
     {
+
         return $this->render("pages/home.html.twig", [
-            'password_default_length' => $this->getParameter('app.password_default_length'),
+            'password_default_length' => $request->getSession()->get('app.length',
+                $this->getParameter('app.password_default_length')
+            ),
             'password_min_length' => $this->getParameter('app.password_min_length'),
             'password_max_length' => $this->getParameter('app.password_max_length'),
         ]);
@@ -33,10 +36,6 @@ class PagesController extends AbstractController
     #[Route('/generate-password', name: 'app_generate_password')]
      public function generatePassword(Request $request, PasswordGenerator $passwordGenerator): Response
      {
-//         $length            =$request->query->getInt('length');
-//         $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
-//         $digits            =$request->query->getBoolean('digits');
-//         $specialCharacters =$request->query->getBoolean('special_characters');
         //Nous nous assurons que la longueur du mot de passe est toujours
         // au minimum {app.password_min_length}
         // et au maximum {app.password_max_length}.
@@ -45,11 +44,24 @@ class PagesController extends AbstractController
             $this->getParameter('app.password_max_length')),
             $this->getParameter('app.password_min_length'));
 
+
+        $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
+        $digits            =$request->query->getBoolean('digits');
+        $specialCharacters =$request->query->getBoolean('special_characters');
+
+         $session = $request->getSession();
+
+         $session->set('app.length', $length);
+         $session->set('app.upperCaseLetters', $uppercaseLatters);
+         $session->set('app.digits', $digits);
+         $session->set('app.specialCharacters', $specialCharacters);
+
+
          $password = $passwordGenerator->generate(
              $length,
-             $request->query->getBoolean('uppercase_latters'),
-             $request->query->getBoolean('digits'),
-             $request->query->getBoolean('special_characters'),
+             $uppercaseLatters,
+             $digits,
+             $specialCharacters,
          );
 
         return $this->render("pages/generatePassword.html.twig",compact('password'));
