@@ -3,10 +3,10 @@
 {% block body %}
     <h1> Password generator</h1>
 
-    <form method="get" action="{{ path('app_generate_password') }}">
+    <form id="js-password-generator-form" method="get" action="{{ path('app_generate_password') }}">
         <div>
-            <label for="Length">Length</label>
-            <select name="length" id="Length">
+            <label for="length">Length</label>
+            <select name="length" id="length">
                 {% for i in password_min_length.. password_max_length %}
                     <option value="{{ i }}"
                            {{ i == password_default_length ?'selected' }}
@@ -18,11 +18,11 @@
         </div>
 
         <div>
-            <label for="Uppercase_letters">Uppercase Letters</label>
+            <label for="uppercase-letters">Uppercase Letters</label>
             <input
                     type="checkbox"
-                    id="Uppercase_letters"
-                    name="uppercase_latters"
+                    id="uppercase-letters"
+                    name="uppercase_letters"
 {#                    {{ app.session.get('app.upperCaseLetters') ? 'checked' }}#}
             >
         </div>
@@ -35,10 +35,10 @@
             >
         </div>
         <div>
-            <label for="special_characters">Special characters</label>
+            <label for="special-characters">Special characters</label>
             <input
                     type="checkbox"
-                    id="special_characters"
+                    id="special-characters"
                     name="special_characters"
 {#                    {{ app.session.get('app.specialCharacters') ? 'checked' }}#}
             >
@@ -47,4 +47,44 @@
             <button type="submit">Generate password</button>
         </div>
     </form>
+
 {% endblock %}
+
+ {% block javascripts %}
+     <script>
+
+         document.addEventListener('DOMContentLoaded', function (){
+
+             const form = document.getElementById('js-password-generator-form');
+
+             const lengthSelect = document.getElementById('length');
+             const upperCaseLettersCheckbox = document.getElementById('uppercase-letters');
+             const digitsCheckbox = document.getElementById('digits');
+             const specialCharacterCheckbox = document.getElementById('special-characters');
+
+                passwordPreferences = JSON.parse( localStorage.getItem('password_preferences'))
+
+             if (passwordPreferences){
+                 lengthSelect.value = passwordPreferences.password_length
+                 upperCaseLettersCheckbox.checked = passwordPreferences.uppercaseLetters
+                 digitsCheckbox.checked = passwordPreferences.digits
+                 specialCharacterCheckbox.checked = passwordPreferences.sepcial_characters
+
+             }
+
+             form.addEventListener('submit', function (e){
+                 // e.preventDefault();
+                 localStorage.setItem('password_preferences', JSON.stringify({
+                     'password_length' : parseInt( lengthSelect.value, 10),
+                     'uppercaseLetters' : upperCaseLettersCheckbox.checked,
+                     'digits':digitsCheckbox.checked,
+                     'sepcial_characters' :specialCharacterCheckbox.checked
+                 }));
+
+                 // form.submit();
+                 //this.submit
+
+             });
+         });
+     </script>
+ {% endblock %}
