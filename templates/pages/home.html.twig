@@ -11,6 +11,9 @@
 {#        }"#}
 {#    >#}
     <h1> Password generator</h1>
+
+    {% set length_to_select = app.request.cookies.getInt('app_length', password_default_length) %}
+
     <form
         id="js-password-generator-form"
         method="get"
@@ -21,7 +24,7 @@
             <select name="length" id="length">
                 {% for i in password_min_length.. password_max_length %}
                     <option value="{{ i }}"
-                           {{ i == password_default_length ?'selected' }}
+                           {{ i ==  length_to_select ?'selected' }}
                     >
                         {{ i }}
                     </option>
@@ -35,7 +38,8 @@
                     type="checkbox"
                     id="uppercase-letters"
                     name="uppercase_letters"
-                    {{ uppercase_letters ? 'checked' }}
+                    {{ app.request.cookies.getBoolean('app_uppercase_letters')? 'checked' }}
+{#                    {{ uppercase_letters ? 'checked' }}#}
 {#                    x-model="uppercaseLetters"#}
 {#                    {{ app.session.get('app.upperCaseLetters') ? 'checked' }}#}
             >
@@ -45,9 +49,10 @@
             <input
                     type="checkbox"
                     id="digits" name="digits"
-                    {{ digits ? 'checked' }}
+                    {{ app.request.cookies.getBoolean('app_digits')? 'checked' }}
+{#                    {{ digits ? 'checked' }}#}
 {#                    x-model="digits"#}
-                    {{ app.session.get('app.digits') ? 'checked' }}
+{#                    {{ app.session.get('app.digits') ? 'checked' }}#}
             >
         </div>
         <div>
@@ -56,7 +61,8 @@
                     type="checkbox"
                     id="special-characters"
                     name="special_characters"
-                    {{ special_characters ? 'checked' }}
+                    {{ app.request.cookies.getBoolean('app_special_characters')? 'checked' }}
+{#                    {{ special_characters ? 'checked' }}#}
 {#                    x-model="specialCharacters"#}
 {#                    {{ app.session.get('app.specialCharacters') ? 'checked' }}#}
             >

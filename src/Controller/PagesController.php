@@ -24,10 +24,10 @@ class PagesController extends AbstractController
 
 
         return $this->render("pages/home.html.twig", [
-            'password_default_length' => $request->cookies->getInt('app_length',$this->getParameter('app.password_default_length')),
-            'uppercase_letters'=>$request->cookies->getBoolean('app_uppercase_letters'),
-            'digits'=>$request->cookies->getBoolean('app_digits'),
-            'special_characters'=>$request->cookies->getBoolean('app_special_characters'),
+            'password_default_length' => $this->getParameter('app.password_default_length'),
+//            'uppercase_letters'=>$request->cookies->getBoolean('app_uppercase_letters'),
+//            'digits'=>$request->cookies->getBoolean('app_digits'),
+//            'special_characters'=>$request->cookies->getBoolean('app_special_characters'),
             'password_min_length' => $this->getParameter('app.password_min_length'),
             'password_max_length' => $this->getParameter('app.password_max_length'),
         ]);
@@ -58,37 +58,37 @@ class PagesController extends AbstractController
 //         $session->set('app.upperCaseLetters', $uppercaseLatters);
 //         $session->set('app.digits', $digits);
 //         $session->set('app.specialCharacters', $specialCharacters);
-
-
+        
          $password = $passwordGenerator->generate(
              $length,
              $uppercaseLatters,
              $digits,
              $specialCharacters,
          );
-
         $response = $this->render("pages/generatePassword.html.twig",compact('password'));
 
-       $response->headers->setCookie(
-            new Cookie(
-            'app_length', $length, new \DateTimeImmutable('+5 years')
-            ));
-
-        $response->headers->setCookie(
-            new Cookie(
-                'app_uppercase_letters', $uppercaseLatters? '1':'0', new \DateTimeImmutable('+5 years')
-            ));
-
-        $response->headers->setCookie(
-            new Cookie(
-                'app_digits', $digits? '1':'0', new \DateTimeImmutable('+5 years')
-            ));
-        $response->headers->setCookie(
-            new Cookie(
-                'app_special_characters', $specialCharacters? '1':'0', new \DateTimeImmutable('+5 years')
-            ));
-
-        return $response;
+      $this->setPasswordPreferencesAsCookies($response,$length,$uppercaseLatters,$digits,$specialCharacters);
+      return $response;
      }
 
+     private function setPasswordPreferencesAsCookies(
+         Response $response,
+         int $length,
+         bool $uppercaseLatters,
+         bool $digits,
+         bool $specialCharacters
+     )
+     {
+        $fiveYearsFromNow = new \DateTimeImmutable('+5 years');
+
+        $response->headers->setCookie(new Cookie('app_length', $length,$fiveYearsFromNow ));
+        $response->headers->setCookie(new Cookie('app_uppercase_letters', $uppercaseLatters? '1':'0', $fiveYearsFromNow));
+        $response->headers->setCookie(new Cookie('app_digits', $digits? '1':'0',$fiveYearsFromNow));
+        $response->headers->setCookie(new Cookie('app_special_characters', $specialCharacters? '1':'0',$fiveYearsFromNow));
+
 }
+
+}
+
+
+
