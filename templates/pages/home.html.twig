@@ -35,8 +35,8 @@
                     type="checkbox"
                     id="uppercase-letters"
                     name="uppercase_letters"
+                    {{ uppercase_letters ? 'checked' }}
 {#                    x-model="uppercaseLetters"#}
-
 {#                    {{ app.session.get('app.upperCaseLetters') ? 'checked' }}#}
             >
         </div>
@@ -45,6 +45,7 @@
             <input
                     type="checkbox"
                     id="digits" name="digits"
+                    {{ digits ? 'checked' }}
 {#                    x-model="digits"#}
                     {{ app.session.get('app.digits') ? 'checked' }}
             >
@@ -55,8 +56,9 @@
                     type="checkbox"
                     id="special-characters"
                     name="special_characters"
+                    {{ special_characters ? 'checked' }}
 {#                    x-model="specialCharacters"#}
-                    {{ app.session.get('app.specialCharacters') ? 'checked' }}
+{#                    {{ app.session.get('app.specialCharacters') ? 'checked' }}#}
             >
         </div>
         <div>

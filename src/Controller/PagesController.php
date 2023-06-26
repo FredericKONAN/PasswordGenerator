@@ -19,11 +19,15 @@ class PagesController extends AbstractController
 //    const PASSWORD_MAX_LENGTH = 60;
 
     #[Route('/', name: 'app_home')]
-    public function home(): Response
+    public function home(Request $request): Response
     {
 
+
         return $this->render("pages/home.html.twig", [
-            'password_default_length' => $this->getParameter('app.password_default_length'),
+            'password_default_length' => $request->cookies->getInt('app_length',$this->getParameter('app.password_default_length')),
+            'uppercase_letters'=>$request->cookies->getBoolean('app_uppercase_letters'),
+            'digits'=>$request->cookies->getBoolean('app_digits'),
+            'special_characters'=>$request->cookies->getBoolean('app_special_characters'),
             'password_min_length' => $this->getParameter('app.password_min_length'),
             'password_max_length' => $this->getParameter('app.password_max_length'),
         ]);
@@ -67,21 +71,21 @@ class PagesController extends AbstractController
 
        $response->headers->setCookie(
             new Cookie(
-            'length', $length, new \DateTimeImmutable('+5 years')
+            'app_length', $length, new \DateTimeImmutable('+5 years')
             ));
 
         $response->headers->setCookie(
             new Cookie(
-                'uppercase_letters', $uppercaseLatters? '1':'0', new \DateTimeImmutable('+5 years')
+                'app_uppercase_letters', $uppercaseLatters? '1':'0', new \DateTimeImmutable('+5 years')
             ));
 
         $response->headers->setCookie(
             new Cookie(
-                'digits', $digits? '1':'0', new \DateTimeImmutable('+5 years')
+                'app_digits', $digits? '1':'0', new \DateTimeImmutable('+5 years')
             ));
         $response->headers->setCookie(
             new Cookie(
-                'special_characters', $specialCharacters? '1':'0', new \DateTimeImmutable('+5 years')
+                'app_special_characters', $specialCharacters? '1':'0', new \DateTimeImmutable('+5 years')
             ));
 
         return $response;
