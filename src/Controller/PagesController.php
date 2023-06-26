@@ -6,6 +6,7 @@ use App\Service\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,9 +43,9 @@ class PagesController extends AbstractController
             $this->getParameter('app.password_max_length')),
             $this->getParameter('app.password_min_length'));
 
-//        $uppercaseLatters  =$request->query->getBoolean('uppercase_latters');
-//        $digits            =$request->query->getBoolean('digits');
-//        $specialCharacters =$request->query->getBoolean('special_characters');
+        $uppercaseLatters  =$request->query->getBoolean('uppercase_letters');
+        $digits            =$request->query->getBoolean('digits');
+        $specialCharacters =$request->query->getBoolean('special_characters');
 
 //        //Methode 1 pour stoker les preferences de l'utilisateur avec la session de symfony
 //         $session = $request->getSession();
@@ -57,12 +58,33 @@ class PagesController extends AbstractController
 
          $password = $passwordGenerator->generate(
              $length,
-             $request->query->getBoolean('uppercase_latters'),
-             $request->query->getBoolean('digits'),
-             $request->query->getBoolean('special_characters'),
+             $uppercaseLatters,
+             $digits,
+             $specialCharacters,
          );
 
-        return $this->render("pages/generatePassword.html.twig",compact('password'));
+        $response = $this->render("pages/generatePassword.html.twig",compact('password'));
+
+       $response->headers->setCookie(
+            new Cookie(
+            'length', $length, new \DateTimeImmutable('+5 years')
+            ));
+
+        $response->headers->setCookie(
+            new Cookie(
+                'uppercase_letters', $uppercaseLatters? '1':'0', new \DateTimeImmutable('+5 years')
+            ));
+
+        $response->headers->setCookie(
+            new Cookie(
+                'digits', $digits? '1':'0', new \DateTimeImmutable('+5 years')
+            ));
+        $response->headers->setCookie(
+            new Cookie(
+                'special_characters', $specialCharacters? '1':'0', new \DateTimeImmutable('+5 years')
+            ));
+
+        return $response;
      }
 
 }
