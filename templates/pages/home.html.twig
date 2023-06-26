@@ -3,13 +3,24 @@
 {% block body %}
     <h1> Password generator</h1>
 
-    <form id="js-password-generator-form" method="get" action="{{ path('app_generate_password') }}">
+    <form
+        id="js-password-generator-form"
+        method="get"
+        action="{{ path('app_generate_password') }}"
+
+        x-data="{
+            length: $persist({{ password_default_length }}),
+            uppercaseLetters: $persist(false),
+            digits: $persist(false),
+            specialCharacters: $persist(false),
+        }"
+    >
         <div>
             <label for="length">Length</label>
-            <select name="length" id="length">
+            <select name="length" id="length" x-model ="length">
                 {% for i in password_min_length.. password_max_length %}
                     <option value="{{ i }}"
-                           {{ i == password_default_length ?'selected' }}
+{#                           {{ i == password_default_length ?'selected' }}#}
                     >
                         {{ i }}
                     </option>
@@ -23,6 +34,8 @@
                     type="checkbox"
                     id="uppercase-letters"
                     name="uppercase_letters"
+                    x-model="uppercaseLetters"
+
 {#                    {{ app.session.get('app.upperCaseLetters') ? 'checked' }}#}
             >
         </div>
@@ -31,6 +44,7 @@
             <input
                     type="checkbox"
                     id="digits" name="digits"
+                    x-model="digits"
 {#                    {{ app.session.get('app.digits') ? 'checked' }}#}
             >
         </div>
@@ -40,6 +54,7 @@
                     type="checkbox"
                     id="special-characters"
                     name="special_characters"
+                    x-model="specialCharacters"
 {#                    {{ app.session.get('app.specialCharacters') ? 'checked' }}#}
             >
         </div>
@@ -51,7 +66,7 @@
 {% endblock %}
 
  {% block javascripts %}
-     <script src= "/js/password_preferences.js" defer>
-
-     </script>
+     <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{#     <script src= "/js/password_preferences.js" defer></script>#}
  {% endblock %}
