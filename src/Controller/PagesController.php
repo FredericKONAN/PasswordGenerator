@@ -58,7 +58,7 @@ class PagesController extends AbstractController
 //         $session->set('app.upperCaseLetters', $uppercaseLatters);
 //         $session->set('app.digits', $digits);
 //         $session->set('app.specialCharacters', $specialCharacters);
-        
+
          $password = $passwordGenerator->generate(
              $length,
              $uppercaseLatters,
