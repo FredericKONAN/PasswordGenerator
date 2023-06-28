@@ -91,6 +91,7 @@ class PasswordGenerator
 
     private function secureShuffle(array $arr):array
     {
+        //source: https://github.com/lamansky/secure-shuffle/blob/master/src/functions.php
         $length = count($arr);
         for ($i = $length - 1; $i>0; $i--) {
             $j = random_int(0, $i);
